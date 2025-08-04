@@ -1,104 +1,220 @@
 /* CSS Variables for Theme Management */
 :root {
-  /* Light theme colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --text-primary: #282c34;
-  --text-secondary: #61dafb;
-  --border-color: #e9ecef;
-  --button-bg: #007bff;
-  --button-text: #ffffff;
-}
+  /* Board Colors */
+  --board-yellow: #FFD700;
+  --board-red: #FF4444;
+  --board-green: #44AA44;
+  --board-blue: #4444FF;
+  --board-orange: #FF8844;
+  
+  /* Snake Colors */
+  --snake-green: #228B22;
+  --snake-blue: #1E90FF;
+  --snake-outline: #006400;
+  
+  /* Ladder Colors */
+  --ladder-red: #DC143C;
+  --ladder-orange: #FF6347;
+  --ladder-wood: #8B4513;
+  
+  /* Text and Numbers */
+  --number-text: #000000;
+  --number-text-white: #FFFFFF;
+  
+  /* Board Structure */
+  --board-border: #333333;
+  --board-background: #FFFFFF;
+  
+  /* Game UI Colors */
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --background-primary: #FFFFFF;
+  --background-secondary: #F8F9FA;
+  --border-color: #E0E0E0;
+  --shadow-color: rgba(0, 0, 0, 0.1);
 
-[data-theme="dark"] {
-  /* Dark theme colors */
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #282c34;
-  --text-primary: #ffffff;
-  --text-secondary: #61dafb;
-  --border-color: #404040;
-  --button-bg: #0056b3;
-  --button-text: #ffffff;
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
 }
 
 .App {
   text-align: center;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--background-secondary);
+  padding: var(--space-md);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.game-container {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: var(--space-lg);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-md);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+@media (max-width: 768px) {
+  .game-container {
+    grid-template-columns: 1fr;
   }
 }
 
-.App-header {
-  background-color: var(--bg-secondary);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: var(--text-primary);
-  transition: background-color 0.3s ease;
+.board-container {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  aspect-ratio: 1;
+  gap: 2px;
+  background-color: var(--board-border);
+  border: 4px solid var(--board-border);
+  border-radius: 8px;
   position: relative;
 }
 
-.App-link {
-  color: var(--text-secondary);
-  transition: color 0.3s ease;
-}
-
-.theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: var(--button-bg);
-  color: var(--button-text);
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 600;
+.board-square {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: clamp(12px, 2.5vw, 16px);
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.1);
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
 }
 
-.theme-toggle:hover {
+.square-number {
+  color: var(--number-text);
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
+  font-family: "Arial Black", sans-serif;
+}
+
+.player-token {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  pointer-events: none;
+}
+
+.snakes-and-ladders-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.snake {
+  stroke-linecap: round;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+}
+
+.ladder-rail {
+  stroke-width: 4;
+}
+
+.ladder-rung {
+  stroke-width: 3;
+}
+
+/* Chat Panel Styles */
+.chat-panel {
+  background: var(--background-primary);
+  border-radius: 12px;
+  padding: var(--space-md);
+  box-shadow: 0 2px 8px var(--shadow-color);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  height: 100%;
+}
+
+.chat-messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.message {
+  padding: var(--space-sm);
+  border-radius: 8px;
+  max-width: 80%;
+}
+
+.message.ai {
+  background-color: var(--background-secondary);
+  align-self: flex-start;
+}
+
+.message.player {
+  background-color: var(--primary-blue);
+  color: white;
+  align-self: flex-end;
+}
+
+/* Game Controls */
+.game-controls {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  padding: var(--space-md);
+}
+
+.btn {
+  font-family: inherit;
+  font-size: var(--font-size-button);
+  font-weight: 600;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: var(--primary-blue);
+  color: white;
+}
+
+.btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  opacity: 0.9;
+  box-shadow: 0 4px 8px var(--shadow-color);
 }
 
-.theme-toggle:active {
-  transform: translateY(0);
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Dice Styles */
+.dice {
+  width: 60px;
+  height: 60px;
+  background: white;
+  border-radius: 8px;
+  display: grid;
+  grid-template-areas: 
+    "a b c"
+    "d e f"
+    "g h i";
+  padding: 8px;
+  box-shadow: 0 2px 4px var(--shadow-color);
 }
 
-/* Responsive design for mobile */
-@media (max-width: 768px) {
-  .theme-toggle {
-    top: 10px;
-    right: 10px;
-    padding: 8px 16px;
-    font-size: 12px;
-  }
+.dot {
+  width: 8px;
+  height: 8px;
+  background: black;
+  border-radius: 50%;
+  align-self: center;
+  justify-self: center;
 }
